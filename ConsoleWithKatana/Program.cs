@@ -40,6 +40,19 @@ namespace ConsoleWithKatana
         /// </param>
         public void Configuration(IAppBuilder appBuilder)
         {
+            // midleware registered before HelloWorld
+            appBuilder.Use(async (environment, next) =>
+            {
+                // a way of logging what the environment is
+                foreach (var entry in environment.Environment)
+                {
+                    Console.WriteLine($"{entry.Key} : {entry.Value}");
+                }
+
+                // chain processing to the next component in the pipeline
+                await next();
+            });
+
             // Inserts a middleware into the OWIN pipeline
             //appBuilder.Use<HelloWorldComponent>();
 
